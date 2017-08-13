@@ -1,5 +1,5 @@
 #npm 디버그 기록
-npm-debug.log*
+*.log*
 
 #프로젝트 의존성
 node_modules
