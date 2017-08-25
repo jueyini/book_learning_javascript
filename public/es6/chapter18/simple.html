@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Simple HTML</title>
+        <style>
+            callout {
+                border: solid 1px #ff0080;
+                margin: 2px 4px;
+                padding: 2px 6px;                
+            }
+            .code {
+                background: #ccc;
+                margin: 1px 2px;
+                padding: 1px 4px;
+                font-family: monospace
+            }
+            .highlight {
+                background: #ff0;
+                font-style: italic;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Simple HTML</h1>
+        </header>
+        <div id="content">
+            <p>This is a <i>simple</i> HTML file.</p>
+            <div clas="callout">
+                <p>This is as fancy as we'll get</p>
+            </div>
+            <p>IDs (such as <span class="code">#contente</span>) are unique (there can only be one per pae).</p>
+            <p>Classes (such as <span class="code">.callout</span>) can be used on many elements.</p>
+            <div id="callout2" class="callout fancy">
+                <p>A single HTML element can have multiple classes.</p>
+            </div>
+            <button data-action="highlight" data-containing="unique">
+                Highlight paragraphs containing "unique"
+            </button>
+            <button data-action="removeHighlights">
+                Remove highlights
+            </button>
+        </div>
+        <script type="text/javascript">
+        (function(){    
+            //문단 하이라이트
+            function highlightParas(containing) {
+                if(typeof containing === 'string')
+                    containing = new RegExp(`\\b${containing}\\b`,'i');
+                const paras = document.getElementsByTagName('p');
+
+                for(let p of paras) {
+                    if(!containing.test(p.textContent)) continue;
+                    // clasList에 하이라이트 CSS 클래스를 해당 요소에 추가한다.
+                    p.classList.add('highlight');
+                }            
+            }
+
+            // unique라는 문자열을 포함하는 문단을 하이라이트 처리합니다.
+            highlightParas('unique');
+            
+            //하이라이트 처리된 문단에서 CSS 클래스를 제거
+            function removeParaHighlights() {
+                const paras = document.querySelectorAll('p.highlight');
+                for(let p of paras) {
+                    // classList에서 하이라이트 CSS 클래스를 
+                    // 해당 요소에서 제거 합니다.
+                    p.classList.remove('highlight');
+                }
+            }  
+                              
+            const highlightActions = document.querySelectorAll('[data-action="highlight"]');
+            
+            //console.log(highlightActions[0].dataset);
+            
+            //highlightActions[0].dataset.containing = "giraffe";
+            //highlightActions[0].dataset.caseSensitive = "true";
+            
+            //console.log(highlightActions[0].dataset);
+
+            for(let a of highlightActions) {
+                a.addEventListener('click', evt => {
+                    evt.preventDefault();
+                    highlightParas(a.dataset.containing);
+                });
+            }
+
+            const removeHighlightActions = document.querySelectorAll('[data-action="removeHighlights"]');
+            for(let a of removeHighlightActions) {
+                a.addEventListener('click', evt => {
+                    evt.preventDefault();
+                    removeParaHighlights();
+                });
+            }
+
+        })();
+        </script>
+    </body>
+</html>

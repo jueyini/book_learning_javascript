@@ -7,7 +7,7 @@ function say(_ref) {
         verb = _ref.verb,
         object = _ref.object;
 
-    console.log('${subject} ${verb} ${object}');
+    console.log(subject + ' ' + verb + ' ' + object);
 }
 
 var _iteratorNormalCompletion = true;
