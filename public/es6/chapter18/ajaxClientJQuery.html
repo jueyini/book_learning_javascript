@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>JQuery-ajaxClient</title>
+    </head>
+    <body>
+        <div class="serverInfo">
+            Server is running on <span data-replace="platform">???</span>
+            with Node <span data-replace="nodeVersion">???</span>. It has
+            been up for <span data-replace="uptime">???</span> seconds.        
+        </div>
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript">
+        function refreshServerInfo(){            
+            const serverInfo = document.querySelector('.serverInfo');
+            $.get('http://localhost:7070').then(
+                //성공한 경우
+                function(data) {
+                    Object.keys(data).forEach(p=>{     
+                        $(`[data-replace="${p}"]`).text(data[p]);
+                    });
+                },
+                function(jqXHR, textStatus, err) {
+                    $serverInfo.addClass('error').html('Error connecting to server.');
+                }
+            );            
+        }
+
+        refreshServerInfo();
+        </script>
+    </body>
+</html>

@@ -42,8 +42,9 @@ update.apply(madeline, [1918, "writer"]);
 ES6의 확산연산자를 사용해도 apply와 같은 결과를 얻을 수 있습니다.
 */
 const newBruce = [1940, "martial artist"];
-update.call(bruce,newBruce); // applt(bruce, new Bruce)와 같습니다.
-
+update.call(bruce,...newBruce); // apply(bruce, newBruce)와 같습니다.
+Math.min(...arr);		// -5
+Math.max(...arr);		// 15
 /*
 bind를 사용하면 함수의 this 값을 영구히 바꿀 수 있습니다. update 메서드를 이리저리 옮기면서도 호출 할 때 this 값은 항상 bruce가 되게끔, call이나 apply, 다른 bind와 함께 호출하더라도 this 값이 bruce가 되도록 하려면 bind를 사용합니다.
 */

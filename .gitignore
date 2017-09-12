@@ -10,3 +10,7 @@ node_modules
 #임시파일
 *.tmp
 *~
+
+#배포파일(트랜스컴파일)
+dist/
+public/dist
