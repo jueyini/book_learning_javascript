@@ -2909,7 +2909,7 @@ Object.defineProperty(log2, 'log', {enumerable: false});
 
 ### 4. 프락시
 
-프락시는 ES6에서 새로 추가된 메타프로그래밍 기능 입니다. 메타프로그래밍이란 프로그램이 자신을 수정하는 것을 말합니다.(책에 있는 것만으로는 ES6에 추가된 프락시에 대해 알기는 충분하지 못한 듯 하다. 다음에 나올 예제들은 그냥 해당하는 프로퍼티의 setter에서 직접 제어할 수 있는 부분들이다.)
+프락시는 ES6에서 새로 추가된 메타프로그래밍 기능 입니다. 메타프로그래밍이란 프로그램이 자신을 수정하는 것을 말합니다.(책에 있는 것만으로는 ES6에 추가된 프락시에 대해 알기는 충분하지 못한 듯 하다. 다음에 나올 예제들은 그냥 해당하는 프로퍼티 접근자 getter와 setter에서 직접 제어할 수 있는 부분들이다.)
 
 객체 프락시는 간단히 말해 객체에 대한 작업을 가로채고, 필요하다면 작업 자체를 수정하는 기능 입니다.
 
@@ -2984,7 +2984,8 @@ const betterCoefficients = new Proxy(coefficients, {
 ```js
 const betterCoefficients = new Proxy(coefficients, {
     get(target, key) {
-        if(!/^[0-9]+$/.test(target[key])) return 0;
+        //if(!/^[0-9]+$/.test(target[key])) return 0;
+        if(!Number.isInteger(target[key])) return 0;
         return target[key] || 0;
     }
 })
@@ -3020,3 +3021,7 @@ protectedCook.redPhosphorus = 150;   // 150
 
 console.log(protectedCook.redPhosphorus);
 ```
+
+**동현:** 앞에서 본 예제들은 접근자 프로퍼티인 getter와 setter를 이용해 충분히 할 수 있다. 책에서 말하기를 여기서 설명한 것은 프락시로 할 수 있는 극히 일부에 불과하다 말한다. 
+
+프락시에 더 알고 싶다면 악셀 라우슈마이어(Axel Rauschmayer)가 쓴글인 『ES6 프락시와 메타프로그래밍』(http://www.2ality.com/2014/12/es6-proxies.html)을 먼저 읽고, MDN문서 http://mzl.la/1QZKM7U 를 읽을 것을 권한다.
