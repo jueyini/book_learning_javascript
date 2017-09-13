@@ -3024,4 +3024,4 @@ console.log(protectedCook.redPhosphorus);
 
 **동현:** 앞에서 본 예제들은 접근자 프로퍼티인 getter와 setter를 이용해 충분히 할 수 있다. 책에서 말하기를 여기서 설명한 것은 프락시로 할 수 있는 극히 일부에 불과하다 말한다. 
 
-프락시에 더 알고 싶다면 악셀 라우슈마이어(Axel Rauschmayer)가 쓴글인 『ES6 프락시와 메타프로그래밍』(http://www.2ality.com/2014/12/es6-proxies.html)을 먼저 읽고, MDN문서 http://mzl.la/1QZKM7U 를 읽을 것을 권한다.
+프락시에 더 알고 싶다면 악셀 라우슈마이어(Axel Rauschmayer)가 쓴글인 『ES6 프락시와 메타프로그래밍』(http://www.2ality.com/2014/12/es6-proxies.html)을 먼저 읽고, MDN문서 http://mzl.la/1QZKM7U 를 읽을 것을 권한다..
