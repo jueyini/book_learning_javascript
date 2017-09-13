@@ -7,8 +7,15 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}\\gulpfile.js"
+            "name": "프로그램 시작",
+            "program": "${file}",
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "프로세스에 연결",
+            "port": 5858
         }
     ]
 }
