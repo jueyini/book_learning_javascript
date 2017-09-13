@@ -2906,3 +2906,117 @@ log2.name = 'test';
 delete log2.name;
 Object.defineProperty(log2, 'log', {enumerable: false});
 ```
+
+### 4. 프락시
+
+프락시는 ES6에서 새로 추가된 메타프로그래밍 기능 입니다. 메타프로그래밍이란 프로그램이 자신을 수정하는 것을 말합니다.(책에 있는 것만으로는 ES6에 추가된 프락시에 대해 알기는 충분하지 못한 듯 하다. 다음에 나올 예제들은 그냥 해당하는 프로퍼티의 setter에서 직접 제어할 수 있는 부분들이다.)
+
+객체 프락시는 간단히 말해 객체에 대한 작업을 가로채고, 필요하다면 작업 자체를 수정하는 기능 입니다.
+
+접근을 수정하는 예제를 만들어 봅시다.
+
+```js
+const coefficients = {
+    a:1,
+    b:2,
+    c:5
+};
+```
+
+이 객체의 프로퍼티가 수학의 계수라고 생각해 봅시다. 다음과 같은 식으로 사용할 수 있을 겁니다.
+
+```js
+function evaluate(x, co) {
+    return co.a + co.b * x +co.c * Math.pow(x,2);
+}
+```
+만약 2차 방정식의 계수를 객체에 저장하고, x 값이 무엇이든 방정식을 계산할 수 있습니다. 그런데 계수가 빠진 객체를 가지고 계산하려 하면 어떻게 될까요?
+
+```js
+const coefficients = {
+    a:1,
+    c:5
+};
+evaluate(5, coefficients); // Nan
+```
+
+프락시를 이용하면 작업을 가로채서 정의되지 않은 프로퍼티는 항상 0을 반환하게 만들 수 있습니다. coefficients 객체에 프락시를 만듭시다.
+
+```js
+const betterCoefficients = new Proxy(coefficients, {
+    get(target, key) {
+        return target[key] || 0;
+    }
+})
+```
+
+Proxy 생성자에 넘기는 첫 번째 매개 변수는 타켓, 즉 프락시할 객체이빈다. 두 번째 매개변수는 가로챌 동작을 가르키는 핸들러입니다. 여기서는 프로퍼티에 접근하는 동작만 가로챘으며 get함수가 핸들러 입니다.
+
+get 함수는 매개변수로 타켓, 프로퍼티 키, 수신자를 받습니다. 이 예제에서는 타켓과 프로퍼티 키만을 사용했습니다.
+
+위의 프락시 객체를 테스트 해보자. 이 예제에서는 해당 키가 타켓에 있는지 확인하고, 없으면 0을 반환한다.
+
+```js
+console.log(betterCoefficients.a);          // 1
+console.log(betterCoefficients.b);          // 0
+console.log(betterCoefficients.c);          // 5
+console.log(betterCoefficients.d);          // 0
+console.log(betterCoefficients.anything);   // 0
+```
+
+cofficients 객체의 프락시에는 무한한 프로퍼티가 있고, 직접 정의한 프로퍼티를 제외하면 모두 값이 0인 것이나 마찬가지 입니다.
+
+키로 소문자 한 글자를 받았을 때만 프락시가 동작하게 할 수도 있습니다.
+
+```js
+const betterCoefficients = new Proxy(coefficients, {
+    get(target, key) {
+        if(!/^[a-z]$/.test(key)) return target[key];
+        return target[key] || 0;
+    }
+})
+```
+
+**연습문제 타임!**
+
+키의 값이 숫자가 아닐 때는 항상 0을 반환하게 해보자.
+
+```js
+const betterCoefficients = new Proxy(coefficients, {
+    get(target, key) {
+        if(!/^[0-9]+$/.test(target[key])) return 0;
+        return target[key] || 0;
+    }
+})
+```
+
+프로퍼티에 값을 할당하려 할떄 set 핸들러를 가로챌 수 있습니다. 객체에서 위험한 프로퍼티가 있어서 한 단계를 더 거치지 않으면 값을 할당하거나 메서드를 호출할 수 없게 하려고 합니다. 거쳐야 할 단계는 allowDangerousOperations setter입니다. 이 값이 true일 때만 위험한 프로퍼티에 접근할 수 있습니다.
+
+```js
+const cook = {
+    name: "Walt",
+    redPhosphorus: 100, // 위험합니다.
+    water: 500          // 안전합니다.
+};
+
+const protectedCook = new Proxy(cook, {
+    set(target, key, value) {
+        if(key == 'redPhosphorus') {
+            if(target.allowDangerousOperations)
+                return target.redPhosphorus = value;
+            else 
+                return console.log("Too dangerous!");
+        }
+        // 다른 프로퍼티는 모두 안전 합니다.
+        target[key] = value;
+    }
+});
+
+protectedCook.water = 550;  // 550
+protectedCook.redPhosphorus = 150; // Too dangerous!
+
+protectedCook.allowDangerousOperations = true;
+protectedCook.redPhosphorus = 150;   // 150
+
+console.log(protectedCook.redPhosphorus);
+```
