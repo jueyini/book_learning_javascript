@@ -70,7 +70,8 @@ $ npm install --save-dev gulp
 
 이 처럼 구성한 프로젝트 루트는 다음과 같은 모양이 될 것이다.
 
-![프로젝트구조]({{ site.url }}/assets/article_images/2017-08-16-es6-develop-tool/2-project-struct.png)
+<img src="https://jueyini.github.io/assets/article_images/2017-08-16-es6-develop-tool/2-project-struct.png" alt="프로젝트구조">
+
 
 (※ 빨간줄은 이 글을 작성하기 전에 실습하며 생긴 이후의 소스들이므로 무시해도 된다.)
 
